@@ -25,6 +25,16 @@ class Instructor extends Person {
     grade(student, subject) {
         console.log(`${student.name} receives a perfect score on ${subject}`);
     }
+    givePoints(student) {
+        let points = Math.floor((Math.random() * 10));
+        if (Math.random() < 0.5) {
+            student.grade += points;
+            console.log(`${student.name} received ${points} points. Total grade now ${student.grade}`);
+        } else {
+            student.grade -= points;
+            console.log(`${student.name} lost ${points} points. Total grade now ${student.grade}`);
+        }
+    }
 }
 
 class Student extends Person {
@@ -33,8 +43,9 @@ class Student extends Person {
         this.previousBackground = learn.previousBackground;
         this.className = learn.className;
         this.favSubjects = learn.favSubjects;
+        this.grade = learn.grade;
     }
-    listsSubjects(favSubjects) {
+    listsSubjects() {
         // console.log(this.favSubjects.forEach(item => item));
         const list = this.favSubjects;
         list.forEach(item => console.log(item));
@@ -44,6 +55,13 @@ class Student extends Person {
     }
     sprintChallenge(subject) {
         console.log(`${this.name} has begun sprint challenge on ${subject}`);
+    }
+    graduate() {
+        if (this.grade >= 70) {
+            console.log(`Congratulations, ${this.name}! You graduated!`);
+        } else {
+            console.log(`Keep working, ${this.name}!`);
+        }
     }
 }
 
@@ -94,7 +112,8 @@ const paris = new Student({
     gender: "M",
     previousBackground: "Prison",
     className: "CS31",
-    favSubjects: ['Python', 'GO', 'Java', 'C#']
+    favSubjects: ['Python', 'GO', 'Java', 'C#'],
+    grade: 70,
 })
 
 const ro = new Student({
@@ -104,7 +123,8 @@ const ro = new Student({
     gender: "F",
     previousBackground: "refugee",
     className: "IOS9",
-    favSubjects: ['React', 'Less', 'JavaScript', 'Python']
+    favSubjects: ['React', 'Less', 'JavaScript', 'Python'],
+    grade: 90,
 })
 
 const crusher = new Student({
@@ -114,7 +134,8 @@ const crusher = new Student({
     gender: "M",
     previousBackground: "cadet",
     className: "WEB19",
-    favSubjects: ['HTML', 'CSS', 'JavaScript']
+    favSubjects: ['HTML', 'CSS', 'JavaScript'],
+    grade: 60,
 })
 
 const riker = new Instructor({
@@ -147,3 +168,9 @@ crusher.sprintChallenge("JavaScript");
 worf.standUp("#CS32_worf");
 troy.debugsCode(paris, "Python");
 console.log(picard.catchPhrase);
+picard.givePoints(crusher);
+crusher.graduate();
+riker.givePoints(paris);
+paris.graduate();
+troy.givePoints(ro);
+ro.graduate();
