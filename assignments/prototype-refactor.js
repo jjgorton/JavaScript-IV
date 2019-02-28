@@ -26,16 +26,16 @@ Prototype Refactor
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 
-function GameObject(attr) {
-    this.createdAt = attr.createdAt;
-    this.name = attr.name;
-    this.dimensions = attr.dimensions;
+class GameObject {
+    constructor(attr) {
+        this.createdAt = attr.createdAt;
+        this.name = attr.name;
+        this.dimensions = attr.dimensions;
+    }
+    destroy() {
+        return `${this.name} was removed from the game.`;
+    }
 }
-
-GameObject.prototype.destroy = function () {
-    return `${this.name} was removed from the game.`;
-}
-
 
 /*
   === CharacterStats ===
@@ -44,16 +44,15 @@ GameObject.prototype.destroy = function () {
   * should inherit destroy() from GameObject's prototype
 */
 
-function CharacterStats(charAttr) {
-    GameObject.call(this, charAttr);
-    this.healthPoints = charAttr.healthPoints;
+class CharacterStats extends GameObject {
+    constructor(charAttr) {
+        super(charAttr);
+        this.healthPoints = charAttr.healthPoints;
+    }
+    takeDamage() {
+        return `${this.name} took damage.`;
+    }
 }
-
-CharacterStats.prototype = Object.create(GameObject.prototype);
-CharacterStats.prototype.takeDamage = function () {
-    return `${this.name} took damage.`;
-}
-
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -65,62 +64,59 @@ CharacterStats.prototype.takeDamage = function () {
   * should inherit takeDamage() from CharacterStats
 */
 
-function Humanoid(humAttr) {
-    // GameObject.call(this, humAttr);   // NOT needed - CharacterStats inherited from GameObject!
-    CharacterStats.call(this, humAttr);
-    this.team = humAttr.team;
-    this.weapons = humAttr.weapons;
-    this.language = humAttr.language;
-}
-
-// Humanoid.prototype = Object.create(GameObject.prototype);  // NOT needed - CharacterStats inherited from GameObject!
-Humanoid.prototype = Object.create(CharacterStats.prototype);
-Humanoid.prototype.greet = function () {
-    return `${this.name} offers a greeting in ${this.language}.`;
+class Humanoid extends CharacterStats {
+    constructor(humAttr) {
+        super(humAttr);
+        this.team = humAttr.team;
+        this.weapons = humAttr.weapons;
+        this.language = humAttr.language;
+    }
+    greet() {
+        return `${this.name} offers a greeting in ${this.language}.`;
+    }
 }
 
 // Villain and Hero constructor functions:
 
-function Villain(evil) {
-    Humanoid.call(this, evil);
-    this.laugh = evil.laugh;
-    this.influence = evil.influence;
-    this.strike = evil.strike;
-}
-
-Villain.prototype = Object.create(Humanoid.prototype);
-Villain.prototype.attack = function (enemy) {
-    console.log(this.laugh);
-    enemy.healthPoints = enemy.healthPoints - this.strike;
-    if (enemy.healthPoints <= 0) {
-        return `${this.name} attacked ${enemy.name}.`, enemy.destroy()
+class Villain extends Humanoid {
+    constructor(evil) {
+        super(evil);
+        this.laugh = evil.laugh;
+        this.influence = evil.influence;
+        this.strike = evil.strike;
     }
-    return `${this.name} attacked ${enemy.name}. ${enemy.name}'s health now at ${enemy.healthPoints}!`;
-}
-
-function Hero(triumph) {
-    Humanoid.call(this, triumph);
-    this.call = triumph.call;
-    this.influence = triumph.influence;
-    this.boost = triumph.boost;
-    this.strike = triumph.strike;
-}
-
-Hero.prototype = Object.create(Humanoid.prototype);
-Hero.prototype.attack = function (enemy) {
-    console.log(this.call);
-    enemy.healthPoints = enemy.healthPoints - this.strike;
-    if (enemy.healthPoints <= 0) {
-        return `${this.name} attacked ${enemy.name}.`, enemy.destroy()
+    attack(enemy) {
+        console.log(this.laugh);
+        enemy.healthPoints = enemy.healthPoints - this.strike;
+        if (enemy.healthPoints <= 0) {
+            return `${this.name} attacked ${enemy.name}.`, enemy.destroy()
+        }
+        return `${this.name} attacked ${enemy.name}. ${enemy.name}'s health now at ${enemy.healthPoints}!`;
     }
-    return `${this.name} attacked ${enemy.name}. ${enemy.name}'s health now at ${enemy.healthPoints}!`;
 }
 
-Hero.prototype.useBoost = function () {
-    this.healthPoints = this.healthPoints + this.boost;
-    return `${this.name} used his boost, health now at ${this.healthPoints}.`
-}
+class Hero extends Humanoid {
+    constructor(triumph) {
+        super(triumph);
+        this.call = triumph.call;
+        this.influence = triumph.influence;
+        this.boost = triumph.boost;
+        this.strike = triumph.strike;
+    }
+    attack(enemy) {
+        console.log(this.call);
+        enemy.healthPoints = enemy.healthPoints - this.strike;
+        if (enemy.healthPoints <= 0) {
+            return `${this.name} attacked ${enemy.name}.`, enemy.destroy()
+        }
+        return `${this.name} attacked ${enemy.name}. ${enemy.name}'s health now at ${enemy.healthPoints}!`;
+    }
 
+    useBoost() {
+        this.healthPoints = this.healthPoints + this.boost;
+        return `${this.name} used his boost, health now at ${this.healthPoints}.`
+    }
+}
 
 /*
  * Inheritance chain: GameObject -> CharacterStats -> Humanoid
