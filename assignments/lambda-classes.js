@@ -34,8 +34,10 @@ class Student extends Person {
         this.className = learn.className;
         this.favSubjects = learn.favSubjects;
     }
-    listsSubjects(list) {
-        console.log(list);
+    listsSubjects(favSubjects) {
+        // console.log(this.favSubjects.forEach(item => item));
+        const list = this.favSubjects;
+        list.forEach(item => console.log(item));
     }
     PRAssignment(subject) {
         console.log(`${this.name} has submitted a PR for ${subject}`);
@@ -58,3 +60,90 @@ class ProjectManagers extends Instructor {
         console.log(`${this.name} debugs ${student.name}'s code on ${subject}`);
     }
 }
+
+////////////////////////////objects/////////////////////////////
+
+const worf = new ProjectManagers({
+    name: "Worf",
+    age: 36,
+    location: "Qr'onus",
+    gender: "M",
+    specialty: "Honor",
+    favLanguage: "Django",
+    catchPhrase: "It is a good day to die",
+    gradClassName: "WEB50",
+    favInstructor: "picard",
+})
+
+const troy = new ProjectManagers({
+    name: "Deanna",
+    age: 28,
+    location: "Betazed",
+    gender: "F",
+    specialty: "Psychology",
+    favLanguage: "React",
+    catchPhrase: "What do you think?",
+    gradClassName: "UX5",
+    favInstructor: "riker",
+})
+
+const paris = new Student({
+    name: "Tom",
+    age: 18,
+    location: "Earth",
+    gender: "M",
+    previousBackground: "Prison",
+    className: "CS31",
+    favSubjects: ['Python', 'GO', 'Java', 'C#']
+})
+
+const ro = new Student({
+    name: "Laren",
+    age: 24,
+    location: "Bajor",
+    gender: "F",
+    previousBackground: "refugee",
+    className: "IOS9",
+    favSubjects: ['React', 'Less', 'JavaScript', 'Python']
+})
+
+const crusher = new Student({
+    name: "Wesley",
+    age: 18,
+    location: "San Francisco",
+    gender: "M",
+    previousBackground: "cadet",
+    className: "WEB19",
+    favSubjects: ['HTML', 'CSS', 'JavaScript']
+})
+
+const riker = new Instructor({
+    name: "William",
+    age: 32,
+    location: "Alaska",
+    gender: "M",
+    specialty: "tactical",
+    favLanguage: "C++",
+    catchPhrase: "I never bluff."
+})
+
+const picard = new Instructor({
+    name: "Jean-Luc",
+    age: 42,
+    location: "France",
+    gender: "M",
+    specialty: "Diplomacy",
+    favLanguage: "C",
+    catchPhrase: "Make it so."
+})
+
+console.log("------ \n Welcom to Lambda School! \n------ ");
+worf.speak();
+troy.grade(crusher, "CSS");
+riker.demo("preprocessors");
+paris.listsSubjects();
+ro.PRAssignment("Sass");
+crusher.sprintChallenge("JavaScript");
+worf.standUp("#CS32_worf");
+troy.debugsCode(paris, "Python");
+console.log(picard.catchPhrase);
